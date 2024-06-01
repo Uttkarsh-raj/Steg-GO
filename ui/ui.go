@@ -64,7 +64,7 @@ func Create(window fyne.Window) {
 	buttons := container.NewGridWithRows(4, addImage, hideText, extractText, downloadImage)
 	body := container.NewGridWithColumns(2, imageContainer, TextContainer)
 	header := container.NewHBox(
-		container.New(layout.NewGridWrapLayout(fyne.NewSize(0, 0)), widget.NewLabel("Steg-GO")),
+		container.New(layout.NewGridWrapLayout(fyne.NewSize(130, 40)), canvas.NewImageFromFile("assets\\title.png")),
 		layout.NewSpacer(),
 		resetAll,
 	)
