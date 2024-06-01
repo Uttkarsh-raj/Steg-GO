@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"image/color"
+	"os"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -29,14 +31,53 @@ func ShowFilePicker(window fyne.Window, selectedFile *widget.Label, image *canva
 	}, window)
 }
 
-func HideTextInImage(window fyne.Window, image *canvas.Image, text *widget.Entry) {
+func HideTextInImage(window fyne.Window, image *canvas.Image, text *widget.Entry, hidenText *string) {
+	content, err := os.ReadFile(image.File)
+	if err != nil {
+		dialog.ShowError(err, window)
+		return
+	}
+	print(text.Text)
+	if text.Text == "" || text == nil {
+		dialog.ShowError(fmt.Errorf("error: Please enter text to be hidden"), window)
+		return
+	}
+	*hidenText = string(content)
+	*hidenText += "\nhiddenText: " + text.Text
+	dialog.ShowInformation("Steganography", "Operation completed successfully! Your image is ready for download in JPG or PNG format.", window)
+}
 
+func DownloadImage(window fyne.Window, image *canvas.Image, hidenText string) {
+
+	if image == nil || image.File == "" {
+		dialog.ShowError(fmt.Errorf("error: No image selected"), window)
+		return
+	}
+
+	dialog.ShowFileSave(func(writer fyne.URIWriteCloser, err error) {
+		if writer == nil {
+			return
+		}
+		if err != nil {
+			dialog.ShowError(err, window)
+			return
+		}
+		defer writer.Close()
+		buffer := bytes.NewBufferString(hidenText)
+		_, err = writer.Write(buffer.Bytes())
+		if err != nil {
+			dialog.ShowError(err, window)
+			return
+		}
+		dialog.ShowInformation("Steganography", "Download completed successfully! Please check the designated location.", window)
+	}, window)
 }
 
 func main() {
 	fmt.Println("Hello Gophers")
 	newApp := app.New()
 	window := newApp.NewWindow("Ste-Go")
+	hiddenText := ""
 
 	window.Resize(fyne.NewSize(800, 600))
 
@@ -69,7 +110,7 @@ func main() {
 	})
 
 	hideText := widget.NewButton("Hide Text", func() {
-		fmt.Println("Hide Text !!")
+		HideTextInImage(window, image, input, &hiddenText)
 	})
 
 	extractText := widget.NewButton("Extract Text", func() {
@@ -77,7 +118,7 @@ func main() {
 	})
 
 	downloadImage := widget.NewButton("Download Image", func() {
-		fmt.Println("Download Image !!!")
+		DownloadImage(window, image, hiddenText)
 	})
 
 	// Grid Layouts
