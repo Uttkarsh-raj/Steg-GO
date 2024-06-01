@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"image/color"
 	"os"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -37,13 +38,12 @@ func HideTextInImage(window fyne.Window, image *canvas.Image, text *widget.Entry
 		dialog.ShowError(err, window)
 		return
 	}
-	print(text.Text)
 	if text.Text == "" || text == nil {
 		dialog.ShowError(fmt.Errorf("error: Please enter text to be hidden"), window)
 		return
 	}
 	*hidenText = string(content)
-	*hidenText += "\nhiddenText: " + text.Text
+	*hidenText += "\n##hiddenText##: " + text.Text
 	dialog.ShowInformation("Steganography", "Operation completed successfully! Your image is ready for download in JPG or PNG format.", window)
 }
 
@@ -73,8 +73,31 @@ func DownloadImage(window fyne.Window, image *canvas.Image, hidenText string) {
 	}, window)
 }
 
+func ExtractTextFromImage(window fyne.Window, image *canvas.Image, text *widget.Entry) {
+	if image.File == "" || image == nil {
+		dialog.ShowError(fmt.Errorf("error: No image selected"), window)
+		return
+	}
+	content, err := os.ReadFile(image.File)
+	if err != nil {
+		dialog.ShowError(err, window)
+		return
+	}
+	info := strings.Split(string(content), "##hiddenText##: ")
+	text.Text = info[len(info)-1]
+	text.Refresh()
+	dialog.ShowInformation("Steganography", "Text extracted Successfully !!", window)
+}
+
+func ResetAll(window fyne.Window, image *canvas.Image, text *widget.Entry) {
+	*image = canvas.Image{}
+	text.Text = ""
+	image.Refresh()
+	text.Refresh()
+	dialog.ShowInformation("Steganography", "Reset Successful !!", window)
+}
+
 func main() {
-	fmt.Println("Hello Gophers")
 	newApp := app.New()
 	window := newApp.NewWindow("Ste-Go")
 	hiddenText := ""
@@ -94,9 +117,9 @@ func main() {
 	imageContainer := container.NewStack(borderImage, image)
 
 	// Text Entry widget
-	input := widget.NewEntry()
+	input := widget.NewMultiLineEntry()
 	input.SetPlaceHolder("Enter text...")
-	input.MultiLine = true
+	input.Wrapping = fyne.TextWrapWord
 
 	// For Text Layout
 	borderText := canvas.NewRectangle(borderColor)
@@ -114,21 +137,26 @@ func main() {
 	})
 
 	extractText := widget.NewButton("Extract Text", func() {
-		fmt.Println("Extract Text !!!")
+		ExtractTextFromImage(window, image, input)
 	})
 
 	downloadImage := widget.NewButton("Download Image", func() {
 		DownloadImage(window, image, hiddenText)
 	})
 
+	resetAll := widget.NewButton("Reset", func() {
+		ResetAll(window, image, input)
+	})
+
 	// Grid Layouts
 	buttons := container.NewGridWithRows(4, addImage, hideText, extractText, downloadImage)
 	body := container.NewGridWithColumns(2, imageContainer, TextContainer)
+	header := container.NewGridWithColumns(2, widget.NewLabel("Ste-Go"), resetAll)
 
 	// Final Layout (UI)
 	window.SetContent(
 		container.NewBorder(
-			widget.NewLabel("Ste-Go"),
+			header,
 			buttons,
 			nil,
 			nil,
