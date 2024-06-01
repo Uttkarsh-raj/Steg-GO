@@ -12,6 +12,8 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -44,7 +46,7 @@ func HideTextInImage(window fyne.Window, image *canvas.Image, text *widget.Entry
 	}
 	*hidenText = string(content)
 	*hidenText += "\n##hiddenText##: " + text.Text
-	dialog.ShowInformation("Steganography", "Operation completed successfully! Your image is ready for download in JPG or PNG format.", window)
+	dialog.ShowInformation("Steg-GO", "Operation completed successfully! Your image is ready for download in JPG or PNG format.", window)
 }
 
 func DownloadImage(window fyne.Window, image *canvas.Image, hidenText string) {
@@ -69,7 +71,7 @@ func DownloadImage(window fyne.Window, image *canvas.Image, hidenText string) {
 			dialog.ShowError(err, window)
 			return
 		}
-		dialog.ShowInformation("Steganography", "Download completed successfully! Please check the designated location.", window)
+		dialog.ShowInformation("Steg-GO", "Download completed successfully! Please check the designated location.", window)
 	}, window)
 }
 
@@ -86,7 +88,7 @@ func ExtractTextFromImage(window fyne.Window, image *canvas.Image, text *widget.
 	info := strings.Split(string(content), "##hiddenText##: ")
 	text.Text = info[len(info)-1]
 	text.Refresh()
-	dialog.ShowInformation("Steganography", "Text extracted Successfully !!", window)
+	dialog.ShowInformation("Steg-GO", "Text extracted Successfully !!", window)
 }
 
 func ResetAll(window fyne.Window, image *canvas.Image, text *widget.Entry) {
@@ -94,12 +96,12 @@ func ResetAll(window fyne.Window, image *canvas.Image, text *widget.Entry) {
 	text.Text = ""
 	image.Refresh()
 	text.Refresh()
-	dialog.ShowInformation("Steganography", "Reset Successful !!", window)
+	dialog.ShowInformation("Steg-GO", "Reset Successful !!", window)
 }
 
 func main() {
 	newApp := app.New()
-	window := newApp.NewWindow("Ste-Go")
+	window := newApp.NewWindow("Steg-GO")
 	hiddenText := ""
 
 	window.Resize(fyne.NewSize(800, 600))
@@ -128,30 +130,34 @@ func main() {
 	TextContainer := container.NewStack(borderText, input)
 
 	// Buttons
-	addImage := widget.NewButton("Add Image", func() {
+	addImage := widget.NewButtonWithIcon("Add Image", theme.FileImageIcon(), func() {
 		ShowFilePicker(window, imageLabel, image)
 	})
 
-	hideText := widget.NewButton("Hide Text", func() {
+	hideText := widget.NewButtonWithIcon("Hide Text", theme.VisibilityOffIcon(), func() {
 		HideTextInImage(window, image, input, &hiddenText)
 	})
 
-	extractText := widget.NewButton("Extract Text", func() {
+	extractText := widget.NewButtonWithIcon("Extract Text", theme.VisibilityIcon(), func() {
 		ExtractTextFromImage(window, image, input)
 	})
 
-	downloadImage := widget.NewButton("Download Image", func() {
+	downloadImage := widget.NewButtonWithIcon("Download Image", theme.DownloadIcon(), func() {
 		DownloadImage(window, image, hiddenText)
 	})
 
-	resetAll := widget.NewButton("Reset", func() {
+	resetAll := widget.NewButtonWithIcon("Reset", theme.ViewRefreshIcon(), func() {
 		ResetAll(window, image, input)
 	})
 
 	// Grid Layouts
 	buttons := container.NewGridWithRows(4, addImage, hideText, extractText, downloadImage)
 	body := container.NewGridWithColumns(2, imageContainer, TextContainer)
-	header := container.NewGridWithColumns(2, widget.NewLabel("Ste-Go"), resetAll)
+	header := container.NewHBox(
+		container.New(layout.NewGridWrapLayout(fyne.NewSize(0, 0)), widget.NewLabel("Steg-GO")),
+		layout.NewSpacer(),
+		resetAll,
+	)
 
 	// Final Layout (UI)
 	window.SetContent(
