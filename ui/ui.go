@@ -17,7 +17,6 @@ func Create(window fyne.Window) {
 	hiddenText := ""
 
 	// Image View
-	imageLabel := widget.NewLabel("NONE")
 	image := canvas.NewImageFromFile("")
 	image.FillMode = canvas.ImageFillContain
 
@@ -41,7 +40,7 @@ func Create(window fyne.Window) {
 
 	// Buttons
 	addImage := widget.NewButtonWithIcon("Add Image", theme.FileImageIcon(), func() {
-		helper.ShowFilePicker(window, imageLabel, image)
+		helper.ShowFilePicker(window, image)
 	})
 
 	hideText := widget.NewButtonWithIcon("Hide Text", theme.VisibilityOffIcon(), func() {

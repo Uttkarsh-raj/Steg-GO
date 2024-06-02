@@ -12,7 +12,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func ShowFilePicker(window fyne.Window, selectedFile *widget.Label, image *canvas.Image) {
+func ShowFilePicker(window fyne.Window, image *canvas.Image) {
 	dialog.ShowFileOpen(func(uc fyne.URIReadCloser, err error) {
 		file := "No files selected!!"
 		if err != nil {
@@ -23,7 +23,6 @@ func ShowFilePicker(window fyne.Window, selectedFile *widget.Label, image *canva
 			return
 		}
 		file = uc.URI().Path()
-		selectedFile.SetText(file)
 		image.File = file
 		image.Hidden = false
 		image.Refresh()
