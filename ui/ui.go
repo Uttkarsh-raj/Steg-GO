@@ -12,7 +12,7 @@ import (
 	"github.com/Uttkarsh-raj/Steg-GO/helper"
 )
 
-func Create(window fyne.Window) {
+func Create(window fyne.Window, titleImage fyne.Resource) {
 
 	hiddenText := ""
 
@@ -63,7 +63,7 @@ func Create(window fyne.Window) {
 	buttons := container.NewGridWithRows(4, addImage, hideText, extractText, downloadImage)
 	body := container.NewGridWithColumns(2, imageContainer, TextContainer)
 	header := container.NewHBox(
-		container.New(layout.NewGridWrapLayout(fyne.NewSize(130, 40)), canvas.NewImageFromFile("assets\\title.png")),
+		container.New(layout.NewGridWrapLayout(fyne.NewSize(130, 40)), canvas.NewImageFromResource(titleImage)),
 		layout.NewSpacer(),
 		resetAll,
 	)

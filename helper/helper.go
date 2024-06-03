@@ -2,7 +2,9 @@ package helper
 
 import (
 	"bytes"
+	"embed"
 	"fmt"
+	"io/fs"
 	"os"
 	"strings"
 
@@ -11,6 +13,14 @@ import (
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/widget"
 )
+
+func LoadResourceFromEmbed(path string, assets *embed.FS) (fyne.Resource, error) {
+	data, err := fs.ReadFile(assets, path)
+	if err != nil {
+		return nil, err
+	}
+	return fyne.NewStaticResource(path, data), nil
+}
 
 func ShowFilePicker(window fyne.Window, image *canvas.Image) {
 	dialog.ShowFileOpen(func(uc fyne.URIReadCloser, err error) {
