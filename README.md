@@ -1,6 +1,6 @@
 # Steg-GO
 <br>
- <center>Steg-GO is an open-source steganography tool built in Golang, allowing users to hide and extract text within images. It features a simple interface for loading, modifying, and downloading images securely. </center>
+ <center>Steg-GO is an open-source steganography tool built in Golang, allowing users to hide and extract text within images. It features a simple interface for loading, modifying, and downloading images securely. Try Steg-GO by downloading the executable (Steg-GO.exe) in the repo. </center>
 <br>
 
 <br><br>
