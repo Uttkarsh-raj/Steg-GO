@@ -1,4 +1,4 @@
-module github.com/Uttkarsh-raj/steganography
+module github.com/Uttkarsh-raj/Steg-GO
 
 go 1.22.2
 

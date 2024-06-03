@@ -7,7 +7,7 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/widget"
-	"github.com/Uttkarsh-raj/steganography/helper"
+	"github.com/Uttkarsh-raj/Steg-GO/helper"
 )
 
 func TestHideTextInImage(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"github.com/Uttkarsh-raj/steganography/ui"
+	"github.com/Uttkarsh-raj/Steg-GO/ui"
 )
 
 func main() {

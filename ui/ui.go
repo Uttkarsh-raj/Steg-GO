@@ -9,7 +9,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"github.com/Uttkarsh-raj/steganography/helper"
+	"github.com/Uttkarsh-raj/Steg-GO/helper"
 )
 
 func Create(window fyne.Window) {
