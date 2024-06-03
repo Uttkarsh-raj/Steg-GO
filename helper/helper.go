@@ -91,7 +91,12 @@ func ExtractTextFromImage(window fyne.Window, image *canvas.Image, text *widget.
 		return
 	}
 	info := strings.Split(string(content), "##hiddenText##: ")
-	text.Text = info[len(info)-1]
+	// Get all hidden text/conversation
+	hiddenText := ""
+	for i := 1; i < len(info); i++ {
+		hiddenText += info[i]
+	}
+	text.Text = hiddenText
 	text.Refresh()
 	dialog.ShowInformation("Steg-GO", "Text extracted Successfully !!", window)
 }

@@ -71,11 +71,17 @@ To get started with your Golang application, follow these steps:
    go mod init github.com/your-username/project-name
    ```
    After installing Golang, you can start running your Go project.
-4. **Run without Debugging**: In your terminal, navigate to the directory containing your main Go file (usually named `main.go`). Then, run the following command to build and execute your Go application:
+4. **Run without Debugging**: In your terminal, navigate to the directory containing your main Go file (usually named `main.go`). Then, run the following command to execute your Go application:
    ```
    go run main.go
    ```
    This command will compile and execute your Go program without generating a binary file.
+
+5. **Build the application**: In your terminal, navigate to the directory containing your main Go file (usually named `main.go`). Then, run the following command to build your Go application:
+   ```
+   fyne package --icon assets\Logo.png
+   ```
+   The icon is required to 
 
 
 
